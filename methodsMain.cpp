@@ -14,16 +14,39 @@ void pressEnt () {
 	cin.get();
 }
 
+string wayFunction (int DBorGWorNDB){
+	string fileName;
+	if (DBorGWorNDB == 0) {
+		fileName = "Base";
+	} else  if (DBorGWorNDB == 1){
+		fileName = "GroupWork";
+	} else {
+		fileName = "BaseNew";
+	}
+	string way = "/home/cossack/DatabaseSource/" + fileName + ".txt";
+	return way;
+}
+
+string nameNewFileUkr (int DBorGWorNDB) {
+	string fileNameUkr;
+	if (DBorGWorNDB == 0) {
+		fileNameUkr = "бази даних";
+	} else  if (DBorGWorNDB == 1){
+		fileNameUkr = "групової обробки";
+	} else {
+		fileNameUkr = "групової обробки (тимчасовий)";
+	}
+	return fileNameUkr;
+}
+
 ///////////////////////////
 //Створення нового файлу //
 ///////////////////////////
 
-int createNewFile(string name){
-	string way = "/home/cossack/DatabaseSource/" + name + ".txt";
-	const char *charWay = way.c_str();
-	ofstream base(charWay);
+int createNewFile(const char* way){
+	ofstream base(way);
 	base.close();
-	if (ifstream(charWay)) {
+	if (ifstream(way)) {
 		return 1;
 	} return 0;
 }
@@ -32,28 +55,30 @@ int createNewFile(string name){
 //Створення нової бази даних//
 //////////////////////////////
 
-int createBase() {
+int createBase(int DBorGWorNDB) {
+	string fileNameUkr = nameNewFileUkr(DBorGWorNDB);
+	string strWay = wayFunction(DBorGWorNDB);
 	char choice = '0';
 	char choice2 = '0';
 	cout << string( 10, '\n' );
-	cout << "---Меню створення.\n\n";
-	if (ifstream("/home/cossack/DatabaseSource/Base.txt")) {
-		cout << "База даних вже створена.\n";
+	cout << "---Меню створення---\n\n";
+	if (ifstream(strWay.c_str())) {
+		cout << "Файл " << fileNameUkr << " вже створений.\n";
 		cout << "Що робити?\n\n";
-		cout << "1. Створити нову базу даних.\n";
+		cout << "1. Створити новий файл " << fileNameUkr << ".\n";
 		cout << "0. Вийти.\n";
 		cin >> choice;
 		cin.clear();
 		switch (choice) {
 			case '1': {
 				cout << string( 100, '\n' );
-				cout << "УВАГА! Стара база даних буде видалена.\n";
+				cout << "УВАГА! Старий файл " << fileNameUkr << " буде видалений.\n";
 				cout << "Ви бажаєте продовжити? (Y/N)\n";
 				cin >> choice2;
 				cin.clear();
 				switch (choice2) {
 					case 'Y': {
-						remove("/home/cossack/DatabaseSource/Base.txt");
+						remove(strWay.c_str());
 						break;
 					}
 					case 'N':
@@ -75,11 +100,11 @@ int createBase() {
 			}
 		}
 	}
-	if (createNewFile("Base")) {
+	if (!createNewFile(strWay.c_str())) {
 		cout << "Сталася невідома помилка, спробуйте ще раз." << endl;
 		pressEnt ();
 		return 0;
-	} else cout << "База успішно створена." << endl;
+	} else cout << "Файл " << fileNameUkr << " успішно створений." << endl;
 	pressEnt ();
 	return 1;
 }
@@ -88,28 +113,11 @@ int createBase() {
 //Перевірка існування бази//
 ////////////////////////////
 
-int searchBase() {
-	if (!ifstream("/home/cossack/DatabaseSource/Base.txt")) {
-			cout << "Помилка, база даних ще не створена./n";
+int searchBase(string strWay) {
+	if (!ifstream(strWay.c_str())) {
+			cout << "Помилка, файл ще не створений./n";
 			return 0;
 	} return 1;
-}
-///////////////////
-//Друк бази даних//
-///////////////////
-
-void printBase() {
-	cout << string( 10, '\n' );
-	if (searchBase()) {
-		string str;
-		ifstream base("/home/cossack/DatabaseSource/Base.txt");
-		while(!base.eof()){
-			getline(base, str);
-			cout << str << endl;
-		}
-		base.close();
-	}
-	pressEnt ();
 }
 
 ///////////////////////////////////////
@@ -117,35 +125,54 @@ void printBase() {
 ///////////////////////////////////////
 
 Tank createObjFromString (string objString){
-	Tank newTank;
+	Tank *newTank = new Tank();
 	if (objString != ""){
 		int start = objString.find("\"") + 1;
 		int end = objString.find("\"", start);
 		int lenght = end - start;
 		string str;
-		newTank.setName(objString.substr(start, lenght));
+		newTank->setName(objString.substr(start, lenght));
 		objString.erase(start - 1, lenght + 3);
 		istringstream stringStream(objString);
-		int id; stringStream >> id; newTank.setId(id);
-		int crew; stringStream >> crew; newTank.setCrew(crew);
-		int maxSpeed; stringStream >> maxSpeed; newTank.setMaxSpeed(maxSpeed);
-		float caliber; stringStream >> caliber; newTank.setCaliber(caliber);
-		int yearOfProduction; stringStream >> yearOfProduction; newTank.setYearOfProduction(yearOfProduction);
-		int weigh; stringStream >> weigh; newTank.setWeigh(weigh);
-		float armor; stringStream >> armor; newTank.setArmor(armor);
+		int id; stringStream >> id; newTank->setId(id);
+		int crew; stringStream >> crew; newTank->setCrew(crew);
+		int maxSpeed; stringStream >> maxSpeed; newTank->setMaxSpeed(maxSpeed);
+		float caliber; stringStream >> caliber; newTank->setCaliber(caliber);
+		int yearOfProduction; stringStream >> yearOfProduction; newTank->setYearOfProduction(yearOfProduction);
+		int weigh; stringStream >> weigh; newTank->setWeigh(weigh);
+		float armor; stringStream >> armor; newTank->setArmor(armor);
 	}
-	return newTank;
+	return *newTank;
+}
+
+///////////////////
+//Друк бази даних//
+///////////////////
+
+void printFile(int DBorGWorNDB) {
+	string strWay = wayFunction(DBorGWorNDB);
+	cout << string( 10, '\n' );
+	if (searchBase(strWay.c_str())) {
+		string str;
+		ifstream base(strWay.c_str());
+		while(!base.eof()){
+			getline(base, str);
+			createObjFromString(str).print();
+		}
+		base.close();
+	}
+	pressEnt ();
 }
 
 ///////////////////////////////////
 //Повернення номер поля за ключем//
 ///////////////////////////////////
 
-int readRecKey(int key) {
+int readRecKey(int key, int DBorGWorNDB) {
 	int currentKey = 0;
 	int i = 0;
 	string str;
-	ifstream base("/home/cossack/DatabaseSource/Base.txt");
+	ifstream base(wayFunction(DBorGWorNDB).c_str());
 	while(!base.eof()){
 		i++;
 		getline(base, str);
@@ -161,38 +188,48 @@ int readRecKey(int key) {
 }
 
 ////////////////////////////////////////////
-//Створення об’єкту з даних користувача   //
+//Створення об’єкта з даних користувача   //
 //в функцію передаємо ключ                //
 ////////////////////////////////////////////
 
-Tank createObj (unsigned int key) {
-	Tank newTank;
-//	unsigned int key;
-//	if (n == 1) {
-//		unsigned int *p = &n;
-//		p++;
-//		key = *p;
-//	} else {
-//		cout << "Введіть значення ключа:" << endl;
-//		cin >> key;
-//	}
-	newTank.setId(key);
+Tank createObj (int key, int DBorGWorNDB) {
+	Tank *newTank = new Tank;
+	if(DBorGWorNDB && searchRecordByKey(key, DBorGWorNDB)){
+		newTank->setId(key);
+		cout << "Ви бажаєте видалити запис з таким ID? (Y/N)" << endl;
+		char choice;
+		cin >> choice;
+		cin.clear();
+		switch (choice) {
+			case 'Y': {
+				newTank->deleteRecord = true;
+				return *newTank;
+			}
+			case 'N':
+				break;
+			default: {
+				cout << "Ви ввели щось не те, спробуйте ще раз." << endl;
+				pressEnt ();
+			}
+		}
+	}
+	newTank->setId(key);
 	cout << "Введіть назву танка" << endl;
-	string name; cin >> name; newTank.setName(name);
+	string name; cin >> name; newTank->setName(name);
 	cout << "Введіть чисельність екіпажу" << endl;
-	int crew; cin >> crew; newTank.setCrew(crew);
+	int crew; cin >> crew; newTank->setCrew(crew);
 	cout << "Введіть максимальну швидкість:" << endl;
-	int maxSpeed; cin >> maxSpeed; newTank.setMaxSpeed(maxSpeed);
+	int maxSpeed; cin >> maxSpeed; newTank->setMaxSpeed(maxSpeed);
 	cout << "Введіть калібр встановленої гармати:" << endl;
-	float caliber; cin >> caliber; newTank.setCaliber(caliber);
+	float caliber; cin >> caliber; newTank->setCaliber(caliber);
 	cout << "Введіть рік початку виробництва:" << endl;
-	int yearOfProduction; cin >> yearOfProduction; newTank.setYearOfProduction(yearOfProduction);
+	int yearOfProduction; cin >> yearOfProduction; newTank->setYearOfProduction(yearOfProduction);
 	cout << "Введіть вагу танка:" << endl;
-	int weigh; cin >> weigh; newTank.setWeigh(weigh);
+	int weigh; cin >> weigh; newTank->setWeigh(weigh);
 	cout << "Введіть товщину броні танка:" << endl;
-	float armor; cin >> armor; newTank.setArmor(armor);
+	float armor; cin >> armor; newTank->setArmor(armor);
 	cin.clear();
-	return newTank;
+	return *newTank;
 }
 
 /////////////////////////////
@@ -235,8 +272,8 @@ int getId (string str) {
 ///////////////////////////
 
 int insertRecord(int key) {
-	if (searchBase()) {
-		if (readRecKey(key)) {
+	if (searchBase("/home/cossack/DatabaseSource/Base.txt")) {
+		if (readRecKey(key, 0)) {
 			cout << "Запис з таким ключем вже є.\n";
 			cout << "Спробуйте ще раз.\n";
 			pressEnt ();
@@ -249,7 +286,7 @@ int insertRecord(int key) {
 			while(!base.eof()){
 				getline(base, str);
 				if(((str == "") && (preKey == 0)) || ((preKey < key) && (getId(str) > key))){
-					Tank newTank = createObj(key);
+					Tank newTank = createObj(key, 0);
 					string newStr = newTank.getAllData();
 					baseNew << newStr << endl;
 				}
@@ -264,18 +301,27 @@ int insertRecord(int key) {
 	} return 0;
 }
 
+int insertRecordToGW(int key){
+	ofstream groupWork("/home/cossack/DatabaseSource/GroupWork.txt", ios_base::app);
+	Tank newTank = createObj(key, 1);
+	string newStr = newTank.getAllData();
+	groupWork << newStr << endl;
+	groupWork.close();
+	return 1;
+}
+
 //////////////////////////////////
 //пошук запису за номером рядка //
 //////////////////////////////////
 
-int searchRecordByField(int numberOfField) {
+int searchRecordByField(int numberOfField, int DBorGWorNDB) {
 	int i = 0;
 	if (numberOfField < 0) {
 		cout << "Ви ввели неправильне поле, спробуйте ще." << endl;
 		pressEnt ();
 		return 0;
-	} else if (searchBase()) {
-		ifstream base("/home/cossack/DatabaseSource/Base.txt");
+	} else if (searchBase(wayFunction(DBorGWorNDB))) {
+		ifstream base(wayFunction(DBorGWorNDB).c_str());
 		while(!base.eof()){
 			string str;
 			i++;
@@ -295,14 +341,16 @@ int searchRecordByField(int numberOfField) {
 //Пошук поля за ключем//
 ////////////////////////
 
-int searchRecordByKey(int key) {
-	int num = readRecKey(key);
+int searchRecordByKey(int key, int DBorGWorNDB) {
+	int num = readRecKey(key, DBorGWorNDB);
 	if (!num) {
-		cout << "Такого ключа немає, спробуйте ще раз." << endl;
-		pressEnt ();
+		if (DBorGWorNDB != 1){
+			cout << "Такого ключа немає, спробуйте ще раз." << endl;
+			pressEnt ();
+		}
 		return 0;
 	} else {
-		return searchRecordByField(num);
+		return searchRecordByField(num, DBorGWorNDB);
 	}
 }
 
@@ -310,16 +358,16 @@ int searchRecordByKey(int key) {
 //Видалення запису//
 ////////////////////
 
-int deleteRecord(int key) {
-	int num = readRecKey(key);
+int deleteRecord(int key, int DBorGWorNDB) {
+	int num = readRecKey(key, DBorGWorNDB);
 	int i = 0;
 	if (!num) {
 		cout << "Такого ключа немає, спробуйте ще раз." << endl;
 		pressEnt ();
 		return 0;
 	} else {
-		ifstream base("/home/cossack/DatabaseSource/Base.txt");
-		ofstream baseNew("/home/cossack/DatabaseSource/BaseNew.txt");
+		ifstream base(wayFunction(DBorGWorNDB).c_str());
+		ofstream baseNew(wayFunction(DBorGWorNDB).c_str());
 		while(!base.eof()){
 			string str;
 			i++;
@@ -334,10 +382,13 @@ int deleteRecord(int key) {
 	}
 }
 
-int modificationRecord(int key) {
-	int num = readRecKey(key);
-	if(deleteRecord(key))
-		return insertRecord(key);
+int modificationRecord(int key,int DBorGWorNDB) {
+	if(deleteRecord(key, DBorGWorNDB)){
+		if(DBorGWorNDB)
+			return insertRecord(key);
+		else
+			return insertRecordToGW(key);
+	}
 	return 0;
 }
 

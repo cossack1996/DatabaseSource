@@ -13,10 +13,11 @@ Tank::Tank(){
 	yearOfProduction = 0;
 	weigh = 0;
 	armor = 0.0;
+	deleteRecord = false;
 }
 
 void Tank::setId (int newId){
-	if (newId < 0) {
+	if (newId < 1) {
 		cout << "Error." << endl;
 	} else {
 		id = newId;
@@ -113,7 +114,33 @@ float Tank::getArmor (){
 
 string Tank::getAllData (){
 	ostringstream out;
-	out << id << " \"" << name << "\" "<< crew << ' ' << maxSpeed << ' '
-			<< caliber << ' ' << yearOfProduction << ' ' << weigh << ' ' << armor;
+	if (deleteRecord) {
+		out << id << " \"0\" ";
+	} else {
+		out << id << " \"" << name << "\" "<< crew << ' ' << maxSpeed << ' '
+		<< caliber << ' ' << yearOfProduction << ' ' << weigh << ' ' << armor;
+	}
 	return out.str();
 }
+
+void Tank::print (){
+	cout << "****************************************" << endl;
+	cout << "** ID: " << id << endl;
+	if (deleteRecord) {
+		cout << "** ЗАПИС В ЧЕРЗІ НА ВИДАЛЕННЯ" << endl;
+	} else {
+		cout << "** НАЗВА: " << name << endl;
+		cout << "** ЕКІПАЖ: " << crew << endl;
+		cout << "** МАКСИМАЛЬНА ШВИДКІСТЬ: " << maxSpeed << endl;
+		cout << "** КАЛІБР ГАРМАТИ: " << caliber << endl;
+		cout << "** РІК ВИГОТОВЛЕННЯ: " << yearOfProduction << endl;
+		cout << "** МАСА: " << weigh << endl;
+		cout << "** БРОНЯ: " << armor << endl;
+	}
+	cout << "****************************************" << endl;
+}
+
+
+
+
+

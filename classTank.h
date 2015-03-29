@@ -14,10 +14,9 @@ private:
 	int yearOfProduction;
 	int weigh;
 	float armor;
-
 public:
 	Tank();
-
+	bool deleteRecord;
 	void setId (int newId);
 	void setName (string newName);
 	void setCrew (int newCrew);
@@ -26,7 +25,6 @@ public:
 	void setYearOfProduction (int newYearOfProduction);
 	void setWeigh (int newWeigh);
 	void setArmor (float newArmor);
-
 	int getId ();
 	string getName ();
 	int getCrew ();
@@ -35,8 +33,8 @@ public:
 	int getYearOfProduction ();
 	int getWeigh ();
 	float getArmor ();
-
 	string getAllData ();
+	void print ();
 };
 
 #endif
