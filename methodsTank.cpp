@@ -15,68 +15,87 @@ Tank::Tank(){
 	armor = 0.0;
 	deleteRecord = false;
 }
-
-void Tank::setId (int newId){
+void Tank::printError() {
+	cout << "**            ERROR             **" << endl;
+	cout << "**********************************" << endl;
+}
+bool Tank::setId (int newId){
 	if (newId < 1) {
-		cout << "Error." << endl;
+		printError();
+		return 0;
 	} else {
 		id = newId;
+		return 1;
 	}
 }
 
-void Tank::setName (string newName){
+bool Tank::setName (string newName){
 	if (newName == "")  {
-		cout << "Error." << endl;
+		printError();
+		return 0;
 	} else {
 		name = newName;
+		return 1;
 	}
 }
 
-void Tank::setCrew (int newCrew){
+bool Tank::setCrew (int newCrew){
 	if (newCrew < 1) {
-		cout << "Error." << endl;
+		printError();
+		return 0;
 	} else {
 		crew = newCrew;
+		return 1;
 	}
 }
 
-void Tank::setMaxSpeed (int newMaxSpeed){
-	if ((newMaxSpeed < 0) && (newMaxSpeed > 150)) {
-		cout << "Error." << endl;
+bool Tank::setMaxSpeed (int newMaxSpeed){
+	if ((newMaxSpeed <= 0) && (newMaxSpeed > 150)) {
+		printError();
+		return 0;
 	} else {
 		maxSpeed = newMaxSpeed;
+		return 1;
 	}
 }
 
-void Tank::setCaliber (float newCaliber){
-	if ((newCaliber < 0) && (newCaliber > 300)) {
-		cout << "Error." << endl;
+bool Tank::setCaliber (float newCaliber){
+	if ((newCaliber <= 0) && (newCaliber > 300)) {
+		printError();
+		return 0;
 	} else {
 		caliber = newCaliber;
+		return 1;
 	}
 }
 
-void Tank::setYearOfProduction (int newYearOfProduction){
+bool Tank::setYearOfProduction (int newYearOfProduction){
 	if ((newYearOfProduction < 1900) && (newYearOfProduction > 2015)) {
-		cout << "Error." << endl;
+		printError();
+		return 0;
 	} else {
 		yearOfProduction = newYearOfProduction;
+		return 1;
 	}
 }
 
-void Tank::setWeigh (int newWeigh){
-	if (newWeigh < 0) {
-		cout << "Error." << endl;
+bool Tank::setWeigh (int newWeigh){
+	if (newWeigh <= 0) {
+		printError();
+		return 0;
 	} else {
 		weigh = newWeigh;
+		return 0;
 	}
 }
 
-void Tank::setArmor (float newArmor){
-	if (newArmor < 0) {
-		cout << "Error." << endl;
+bool Tank::setArmor (float newArmor){
+	if (newArmor <= 0) {
+		printError();
+		return 0;
 	} else {
 		armor = newArmor;
+		return 1;
 	}
 }
 
@@ -124,20 +143,21 @@ string Tank::getAllData (){
 }
 
 void Tank::print (){
-	cout << "****************************************" << endl;
-	cout << "** ID: " << id << endl;
+	if (!id) return;
+	cout << "**********************************" << endl;
+	cout << "** ID: " << id << "\t\t\t**" << endl;
 	if (deleteRecord) {
-		cout << "** ЗАПИС В ЧЕРЗІ НА ВИДАЛЕННЯ" << endl;
+		cout << "** ЗАПИС В ЧЕРЗІ НА ВИДАЛЕННЯ\t**" << endl;
 	} else {
-		cout << "** НАЗВА: " << name << endl;
-		cout << "** ЕКІПАЖ: " << crew << endl;
-		cout << "** МАКСИМАЛЬНА ШВИДКІСТЬ: " << maxSpeed << endl;
-		cout << "** КАЛІБР ГАРМАТИ: " << caliber << endl;
-		cout << "** РІК ВИГОТОВЛЕННЯ: " << yearOfProduction << endl;
-		cout << "** МАСА: " << weigh << endl;
-		cout << "** БРОНЯ: " << armor << endl;
+		cout << "** НАЗВА: " << name << "\t\t**" << endl;
+		cout << "** ЕКІПАЖ: " << crew << "\t\t\t**" << endl;
+		cout << "** МАКСИМАЛЬНА ШВИДКІСТЬ: " << maxSpeed << "\t**" << endl;
+		cout << "** КАЛІБР ГАРМАТИ: " << caliber << "\t\t**" << endl;
+		cout << "** РІК ВИГОТОВЛЕННЯ: " << yearOfProduction << "\t**" << endl;
+		cout << "** МАСА: " << weigh << "\t\t\t**" << endl;
+		cout << "** БРОНЯ: " << armor << "\t\t\t**" << endl;
 	}
-	cout << "****************************************" << endl;
+	cout << "**********************************" << endl;
 }
 
 

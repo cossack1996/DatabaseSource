@@ -12,23 +12,31 @@ int main() {
 	setlocale(LC_ALL, "Ukrainian_Ukraine.1251");
 	int choice;
 	while(1) {
-		cout << "--------Головне меню--------\n";
-		cout << "   Що ви бажаєте зробити?\n\n";
-		cout << "1. Створити файл бази даних.\n";
-		cout << "2. Вивести базу даних на екран.\n";
-		cout << "3. Вставити новий запис.\n";
-		cout << "4. Зчитати запис за полем.\n";
-		cout << "5. Зчитати запис за ключем.\n";
-		cout << "6. Змінити запис за ключем.\n";
-		cout << "7. Видалити запис за ключем.\n";
-		cout << "8. Робота з файлом груповоъ обробкию.\n";
-
-		cout << "0. Вихід.\n\n";
-
+		cout << "**********************************" << endl;
+		cout << "**         Головне меню         **" << endl;
+		cout << "**********************************" << endl;
+		cout << "**    Що ви бажаєте зробити?    **" << endl;
+		cout << "**                              **" << endl;
+		cout << "** 1. Створити файл бази даних. **" << endl;
+		cout << "** 2. Вивести базу даних.       **" << endl;
+		cout << "** 3. Вставити новий запис.     **" << endl;
+		cout << "** 4. Зчитати запис за полем.   **" << endl;
+		cout << "** 5. Зчитати запис за ключем.  **" << endl;
+		cout << "** 6. Змінити запис за ключем.  **" << endl;
+		cout << "** 7. Видалити запис за ключем. **" << endl;
+		cout << "** 8. Файл групової роботи.     **" << endl;
+		cout << "**                              **" << endl;
+		cout << "** 0. Вихід.                    **" << endl;
+		cout << "**********************************" << endl;
+		cout << "** ";
 		cin >> choice;
+		 if(!cin) {
+		     cin.clear();
+		     cin.ignore(cin.rdbuf()->in_avail());
+		 }
 		switch (choice) {
 		case 1: {
-			createBase(0);
+			createFile(0);
 			break;
 			}
 		case 2: {
@@ -36,23 +44,23 @@ int main() {
 			break;
 			}
 		case 3: {
-			insertRecord(out("Новий ключ:"));
+			insertRecord(out("** Введіть новий ключ.          **"));
 			break;
 			}
 		case 4: {
-			searchRecordByField(out("Введіть номер поля, яке Ви шукаєте:"), 0);
+			searchRecordByField(out("** Введіть номер поля,          **\n** яке Ви шукаєте.              **"), 0);
 			break;
 			}
 		case 5: {
-			searchRecordByKey(out("Введіть ключ:"), 0);
+			searchRecordByKey(out("** Введіть ключ запису.         **"), 0);
 			break;
 			}
 		case 6: {
-			modificationRecord(out("Введіть ключ запису, який Ви хочете модифікувати:"), 0);
+			modificationRecord(out("** Введіть ключ запису.         **\n** Який Ви хочете модифікувати. **"), 0);
 			break;
 			}
 		case 7: {
-			deleteRecord(out("Введіть ключ запису, який Ви хочете видалити:"), 0);
+			deleteRecord(out("** Введіть ключ запису.         **\n** Який Ви хочете видалити.     **"), 0);
 			break;
 			}
 		case 8: {
@@ -60,6 +68,8 @@ int main() {
 			break;
 			}
 		case 0:
+			cout << "** Робота з програмою завершена.**" << endl;
+			cout << "**********************************" << endl;
 			return 0;
 		default:
 			break;
@@ -69,9 +79,11 @@ int main() {
 
 int out (string str){
 	int key;
-	cout << string( 10, '\n' );
+	cout << "**********************************" << endl;
 	cout << str << endl;
+	cout << "** ";
 	cin >> key;
+	cout << "**********************************" << endl;
 	cin.clear();
 	return key;
 }
@@ -79,22 +91,30 @@ int out (string str){
 void groupFileMenu(){
 	int choice;
 	while(1) {
-		cout << "--Меню файлу групової обробки--\n";
-		cout << "    Що ви бажаєте зробити?\n\n";
-		cout << "1. Створити файл групової обробки.\n";
-		cout << "2. Друк файлу групової обробки.\n";
-		cout << "3. Вставити новий запис.\n";
-		cout << "4. Пошук запису за ключем.\n";
-		cout << "5. Видалення запису за ключем.\n";
-		cout << "6. Модифікація запису за ключем.\n";
-		cout << "7. Підтвердити зміни.\n";
-
-		cout << "0. Повернутися в головне меню.\n";
-
+		cout << "**********************************" << endl;
+		cout << "**  Меню файлу групової роботи. **" << endl;
+		cout << "**********************************" << endl;
+		cout << "**    Що ви бажаєте зробити?    **" << endl;
+		cout << "**                              **" << endl;
+		cout << "** 1. Створити файл ГР.         **" << endl;
+		cout << "** 2. Вивести файл ГР.          **" << endl;
+		cout << "** 3. Вставити новий запис.     **" << endl;
+		cout << "** 4. Зчитати запис за ключем.  **" << endl;
+		cout << "** 5. Змінити запис за ключем.  **" << endl;
+		cout << "** 6. Видалити запис за ключем. **" << endl;
+		cout << "** 7. Підтвердити зміни.        **" << endl;
+		cout << "**                              **" << endl;
+		cout << "** 0. Вихід в головне меню.     **" << endl;
+		cout << "**********************************" << endl;
+		cout << "** ";
 		cin >> choice;
+		 if(!cin) {
+		     cin.clear();
+		     cin.ignore(cin.rdbuf()->in_avail());
+		 }
 		switch (choice) {
 		case 1: {
-			createBase(1);
+			createFile(1);
 			break;
 			}
 		case 2: {
@@ -102,19 +122,19 @@ void groupFileMenu(){
 			break;
 			}
 		case 3: {
-			insertRecordToGW(out("Новий ключ:"));
+			insertRecordToGW(out("** Введіть новий ключ.          **"));
 			break;
 			}
 		case 4: {
-			searchRecordByKey(out("Введіть ключ:"), 1);
+			searchRecordByKey(out("** Введіть ключ запису.         **"), 1);
 			break;
 			}
 		case 5: {
-			deleteRecord(out("Введіть ключ запису, який Ви хочете видалити:"), 1);
+			modificationRecord(out("** Введіть ключ запису.         **\n** Який Ви хочете модифікувати. **"), 1);
 			break;
 			}
 		case 6: {
-			modificationRecord(out("Введіть ключ запису, який Ви хочете модифікувати:"), 1);
+			deleteRecord(out("** Введіть ключ запису.         **\n** Який Ви хочете видалити.     **"), 1);
 			break;
 			}
 		case 7: {

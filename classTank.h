@@ -17,14 +17,14 @@ private:
 public:
 	Tank();
 	bool deleteRecord;
-	void setId (int newId);
-	void setName (string newName);
-	void setCrew (int newCrew);
-	void setMaxSpeed (int newMaxSpeed);
-	void setCaliber (float newCaliber);
-	void setYearOfProduction (int newYearOfProduction);
-	void setWeigh (int newWeigh);
-	void setArmor (float newArmor);
+	bool setId (int newId);
+	bool setName (string newName);
+	bool setCrew (int newCrew);
+	bool setMaxSpeed (int newMaxSpeed);
+	bool setCaliber (float newCaliber);
+	bool setYearOfProduction (int newYearOfProduction);
+	bool setWeigh (int newWeigh);
+	bool setArmor (float newArmor);
 	int getId ();
 	string getName ();
 	int getCrew ();
@@ -35,6 +35,7 @@ public:
 	float getArmor ();
 	string getAllData ();
 	void print ();
+	void printError ();
 };
 
 #endif

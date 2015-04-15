@@ -5,11 +5,31 @@
 #include <sstream>
 
 using namespace std;
-
-/////////////////////////////////
-
+//////////////////////////////////
+int createFile(int);
+void printFile(int);
+int insertRecord(int);
+int insertRecordToGW(int);
+//////////////////////////////////
+int searchRecordByField(int, int);
+int searchRecordByFieldNumber(int, int);
+int searchRecordByKey(int, int);
+int modificationRecord(int, int);
+int deleteRecord(int, int);
+//////////////////////////////////
+void pressEnt ();
+string wayFunction (int);
+string nameNewFileUkr (int);
+int searchBase(string);
+Tank createObjFromString (string);
+int readRecKey(int, int);
+Tank createObj (int, int);
+int deleteFileAndRename();
+int getId (string);
+//////////////////////////////////
 void pressEnt () {
-	cout << "Press ENTER\n";
+	cout << "** Натисніть ENTER              **" << endl;
+	cout << "**********************************" << endl;
 	cin.get();
 	cin.get();
 }
@@ -30,9 +50,9 @@ string wayFunction (int DBorGWorNDB){
 string nameNewFileUkr (int DBorGWorNDB) {
 	string fileNameUkr;
 	if (DBorGWorNDB == 0) {
-		fileNameUkr = "бази даних";
+		fileNameUkr = "БД";
 	} else  if (DBorGWorNDB == 1){
-		fileNameUkr = "групової обробки";
+		fileNameUkr = "ГР";
 	} else {
 		fileNameUkr = "групової обробки (тимчасовий)";
 	}
@@ -55,25 +75,32 @@ int createNewFile(const char* way){
 //Створення нової бази даних//
 //////////////////////////////
 
-int createBase(int DBorGWorNDB) {
+int createFile(int DBorGWorNDB) {
 	string fileNameUkr = nameNewFileUkr(DBorGWorNDB);
 	string strWay = wayFunction(DBorGWorNDB);
 	char choice = '0';
 	char choice2 = '0';
-	cout << string( 10, '\n' );
-	cout << "---Меню створення---\n\n";
+	cout << "**********************************" << endl;
+	cout << "**     Меню створення файлу     **" << endl;
+	cout << "**********************************" << endl;
 	if (ifstream(strWay.c_str())) {
-		cout << "Файл " << fileNameUkr << " вже створений.\n";
-		cout << "Що робити?\n\n";
-		cout << "1. Створити новий файл " << fileNameUkr << ".\n";
-		cout << "0. Вийти.\n";
+		cout << "** Файл " << fileNameUkr << " вже створений.\t**" << endl;
+		cout << "** Що робити?                   **" << endl;
+		cout << "**                              **" << endl;
+		cout << "** 1. Створити новий файл " << fileNameUkr << ".\t**" << endl;
+		cout << "** 0. Вийти.                    **" << endl;
+		cout << "**********************************" << endl;
+		cout << "** ";
 		cin >> choice;
 		cin.clear();
 		switch (choice) {
 			case '1': {
-				cout << string( 100, '\n' );
-				cout << "УВАГА! Старий файл " << fileNameUkr << " буде видалений.\n";
-				cout << "Ви бажаєте продовжити? (Y/N)\n";
+				cout << "**********************************" << endl;
+				cout << "**            УВАГА!            **" << endl;
+				cout << "** Старий файл " << fileNameUkr << " буде видалений**" << endl;
+				cout << "** Ви бажаєте продовжити? (Y/N) **" << endl;
+				cout << "**********************************" << endl;
+				cout << "** ";
 				cin >> choice2;
 				cin.clear();
 				switch (choice2) {
@@ -84,7 +111,8 @@ int createBase(int DBorGWorNDB) {
 					case 'N':
 						return 0;
 					default: {
-						cout << "Ви ввели щось не те, спробуйте ще раз." << endl;
+						cout << "**********************************" << endl;
+						cout << "** Помилка вводу, спробуйте ще. **" << endl;
 						pressEnt ();
 						return 0;
 					}
@@ -94,17 +122,24 @@ int createBase(int DBorGWorNDB) {
 			case '0':
 				return 0;
 			default: {
-				cout << "Ви ввели щось не те, спробуйте ще раз." << endl;
+				cout << "**********************************" << endl;
+				cout << "** Помилка вводу, спробуйте ще. **" << endl;
 				pressEnt ();
 				return 0;
 			}
 		}
 	}
 	if (!createNewFile(strWay.c_str())) {
-		cout << "Сталася невідома помилка, спробуйте ще раз." << endl;
+		cout << "**********************************" << endl;
+		cout << "** Сталася невідома помилка.    **" << endl;
+		cout << "** Спробуйте ще раз.            **" << endl;
 		pressEnt ();
 		return 0;
-	} else cout << "Файл " << fileNameUkr << " успішно створений." << endl;
+
+	} else {
+		cout << "**********************************" << endl;
+		cout << "** Файл " << fileNameUkr << " успішно створений.   **" << endl;
+	}
 	pressEnt ();
 	return 1;
 }
@@ -115,7 +150,6 @@ int createBase(int DBorGWorNDB) {
 
 int searchBase(string strWay) {
 	if (!ifstream(strWay.c_str())) {
-			cout << "Помилка, файл ще не створений./n";
 			return 0;
 	} return 1;
 }
@@ -151,7 +185,6 @@ Tank createObjFromString (string objString){
 
 void printFile(int DBorGWorNDB) {
 	string strWay = wayFunction(DBorGWorNDB);
-	cout << string( 10, '\n' );
 	if (searchBase(strWay.c_str())) {
 		string str;
 		ifstream base(strWay.c_str());
@@ -194,9 +227,11 @@ int readRecKey(int key, int DBorGWorNDB) {
 
 Tank createObj (int key, int DBorGWorNDB) {
 	Tank *newTank = new Tank;
-	if(DBorGWorNDB && searchRecordByKey(key, DBorGWorNDB)){
+	if(DBorGWorNDB && searchRecordByKey(key, 1)){
 		newTank->setId(key);
-		cout << "Ви бажаєте видалити запис з таким ID? (Y/N)" << endl;
+		cout << "** Ви бажаєте видалити запис з  **" << endl;
+		cout <<	"** таким ID? (Y/N)              **" << endl;
+		cout << "**********************************" << endl;
 		char choice;
 		cin >> choice;
 		cin.clear();
@@ -208,27 +243,28 @@ Tank createObj (int key, int DBorGWorNDB) {
 			case 'N':
 				break;
 			default: {
-				cout << "Ви ввели щось не те, спробуйте ще раз." << endl;
+				cout << "** Помилка вводу.               **" << endl;
+				cout << "**********************************" << endl;
 				pressEnt ();
 			}
 		}
 	}
 	newTank->setId(key);
-	cout << "Введіть назву танка" << endl;
-	string name; cin >> name; newTank->setName(name);
-	cout << "Введіть чисельність екіпажу" << endl;
-	int crew; cin >> crew; newTank->setCrew(crew);
-	cout << "Введіть максимальну швидкість:" << endl;
-	int maxSpeed; cin >> maxSpeed; newTank->setMaxSpeed(maxSpeed);
-	cout << "Введіть калібр встановленої гармати:" << endl;
-	float caliber; cin >> caliber; newTank->setCaliber(caliber);
-	cout << "Введіть рік початку виробництва:" << endl;
-	int yearOfProduction; cin >> yearOfProduction; newTank->setYearOfProduction(yearOfProduction);
-	cout << "Введіть вагу танка:" << endl;
-	int weigh; cin >> weigh; newTank->setWeigh(weigh);
-	cout << "Введіть товщину броні танка:" << endl;
-	float armor; cin >> armor; newTank->setArmor(armor);
-	cin.clear();
+	cout << "** Введіть назву танка.         **" << endl << "** ";
+	string name; cin >> name; cin.clear(); newTank->setName(name);
+	cout << "** Введіть чисельність екіпажу. **" << endl << "** ";
+	int crew; cin >> crew; cin.clear(); newTank->setCrew(crew);
+	cout << "** Введіть максимальну швидкість**" << endl << "** ";
+	int maxSpeed; cin >> maxSpeed; cin.clear(); newTank->setMaxSpeed(maxSpeed);
+	cout << "** Введіть калібр гармати.      **" << endl << "** ";
+	float caliber; cin >> caliber; cin.clear(); newTank->setCaliber(caliber);
+	cout << "** Введіть рік виробництва.     **" << endl << "** ";
+	int yearOfProduction; cin >> yearOfProduction; cin.clear(); newTank->setYearOfProduction(yearOfProduction);
+	cout << "** Введіть вагу танка.          **" << endl << "** ";
+	int weigh; cin >> weigh; cin.clear(); newTank->setWeigh(weigh);
+	cout << "** Введіть товщину броні танка. **" << endl << "** ";
+	float armor; cin >> armor; cin.clear(); newTank->setArmor(armor);
+	cout << "**********************************" << endl;
 	return *newTank;
 }
 
@@ -240,12 +276,18 @@ Tank createObj (int key, int DBorGWorNDB) {
 int deleteFileAndRename() {
 	if(remove("/home/cossack/DatabaseSource/Base.txt")){
 		remove("/home/cossack/DatabaseSource/BaseNew.txt");
-		cout << "Сталася невідома помилка(при видаленні файлу).\nСпробуйте ще раз." << endl;
+		cout << "**********************************" << endl;
+		cout << "** Сталася невідома помилка.    **" << endl;
+		cout <<	"** Спробуйте ще раз.            **" << endl;
+		cout << "**********************************" << endl;
 		pressEnt ();
 		return 0;
 	} else {
 		if(rename ("/home/cossack/DatabaseSource/BaseNew.txt", "/home/cossack/DatabaseSource/Base.txt")) {
-			cout << "Сталася невідома помилка(при перейменуванні файлу).\nСпробуйте ще раз." << endl;
+			cout << "**********************************" << endl;
+			cout << "** Сталася невідома помилка.    **" << endl;
+			cout <<	"** Спробуйте ще раз.            **" << endl;
+			cout << "**********************************" << endl;
 			pressEnt ();
 			return 0;
 		}
@@ -274,8 +316,10 @@ int getId (string str) {
 int insertRecord(int key) {
 	if (searchBase("/home/cossack/DatabaseSource/Base.txt")) {
 		if (readRecKey(key, 0)) {
-			cout << "Запис з таким ключем вже є.\n";
-			cout << "Спробуйте ще раз.\n";
+			cout << "**********************************" << endl;
+			cout << "** Запис з таким ключем вже є.  **" << endl;
+			cout <<	"** Спробуйте ще раз.            **" << endl;
+			cout << "**********************************" << endl;
 			pressEnt ();
 			return 0;
 		} else {
@@ -314,11 +358,16 @@ int insertRecordToGW(int key){
 //пошук запису за номером рядка //
 //////////////////////////////////
 
-int searchRecordByField(int numberOfField, int DBorGWorNDB) {
+int searchRecordByFieldNumber(int numberOfField, int DBorGWorNDB) {
 	int i = 0;
 	if (numberOfField < 0) {
-		cout << "Ви ввели неправильне поле, спробуйте ще." << endl;
-		pressEnt ();
+		if (DBorGWorNDB != 1){
+			cout << "**********************************" << endl;
+			cout << "** Ви ввели неправильне поле.   **" << endl;
+			cout <<	"** Спробуйте ще раз.            **" << endl;
+			cout << "**********************************" << endl;
+			pressEnt ();
+		}
 		return 0;
 	} else if (searchBase(wayFunction(DBorGWorNDB))) {
 		ifstream base(wayFunction(DBorGWorNDB).c_str());
@@ -327,12 +376,17 @@ int searchRecordByField(int numberOfField, int DBorGWorNDB) {
 			i++;
 			getline(base, str);
 			if((numberOfField == i)&&(str != "")) {
-				cout << str << endl;
-				pressEnt ();
+				if (DBorGWorNDB != 1){
+					createObjFromString(str).print();
+					pressEnt ();
+				}
 				return 1;
 			}
 		}
-		cout << "Такого поля немає, спробуйте ще раз." << endl;
+		cout << "**********************************" << endl;
+		cout << "** Такого поля немає.           **" << endl;
+		cout <<	"** Спробуйте ще раз.            **" << endl;
+		cout << "**********************************" << endl;
 		pressEnt ();
 	} return 0;
 }
@@ -345,12 +399,15 @@ int searchRecordByKey(int key, int DBorGWorNDB) {
 	int num = readRecKey(key, DBorGWorNDB);
 	if (!num) {
 		if (DBorGWorNDB != 1){
-			cout << "Такого ключа немає, спробуйте ще раз." << endl;
+			cout << "**********************************" << endl;
+			cout << "** Такого ключа немає.          **" << endl;
+			cout <<	"** Спробуйте ще раз.            **" << endl;
+			cout << "**********************************" << endl;
 			pressEnt ();
 		}
 		return 0;
 	} else {
-		return searchRecordByField(num, DBorGWorNDB);
+		return searchRecordByFieldNumber(num, DBorGWorNDB);
 	}
 }
 
@@ -362,7 +419,10 @@ int deleteRecord(int key, int DBorGWorNDB) {
 	int num = readRecKey(key, DBorGWorNDB);
 	int i = 0;
 	if (!num) {
-		cout << "Такого ключа немає, спробуйте ще раз." << endl;
+		cout << "**********************************" << endl;
+		cout << "** Такого ключа немає.          **" << endl;
+		cout <<	"** Спробуйте ще раз.            **" << endl;
+		cout << "**********************************" << endl;
 		pressEnt ();
 		return 0;
 	} else {
@@ -382,6 +442,10 @@ int deleteRecord(int key, int DBorGWorNDB) {
 	}
 }
 
+//////////////////////
+//Модифікація запису//
+//////////////////////
+
 int modificationRecord(int key,int DBorGWorNDB) {
 	if(deleteRecord(key, DBorGWorNDB)){
 		if(DBorGWorNDB)
@@ -392,5 +456,11 @@ int modificationRecord(int key,int DBorGWorNDB) {
 	return 0;
 }
 
+////////////////////////////////
+//Пошук запису за назвою поля //
+////////////////////////////////
 
+int searchRecordByField(int numberOfField, int DBorGWorNDB) {
+	return 0;
+}
 

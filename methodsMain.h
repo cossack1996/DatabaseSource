@@ -1,7 +1,7 @@
 #ifndef methodsMain
 #define methodsMain
 
-int createBase(int);
+int createFile(int);
 void printFile(int);
 int insertRecord(int);
 int searchRecordByField(int, int);
